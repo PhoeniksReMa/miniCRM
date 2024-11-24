@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 
@@ -8,6 +9,12 @@ class Contact(models.Model):
     adress = models.CharField('Адрес', max_length=250)
     deal_count = models.IntegerField('Количество сделок', null=True)
 
+    # # Получение всех сделок, связанных с этим контактом
+    # deals = contact.deals.all()
+    #
+    # # Преобразование сделок в словари, если нужно
+    # deals_data = [deal.toDict() for deal in deals]
+
     def toDict(self):
         return {
             'id': self.id,
@@ -15,6 +22,7 @@ class Contact(models.Model):
             'phone': self.phone,
             'adress': self.adress,
             'deal_count': self.deal_count,
+            'deals': [deal.toDict() for deal in self.deals.all()]
         }
 
 class Deal(models.Model):
